@@ -1,6 +1,6 @@
 This project is the implementation part of the Big Data for Bioanalytics and Medicine (S2_BDBM6ILV) course taught in the summer semester of 2026 at IMC FH Krems.
 
-The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107015), and this project will be focused on reproducing the results in [Identification of Novel Signal Transduction, Immune Function, and Oxidative Stress Genes and Pathways by Topiramate for Treatment of Methamphetamine Dependence Based on Secondary Outcomes](https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2017.00271/full). 
+The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107015), and this project will be focused on reproducing the results in [this article](https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2017.00271/full) titled "Identification of Novel Signal Transduction, Immune Function, and Oxidative Stress Genes and Pathways by Topiramate for Treatment of Methamphetamine Dependence Based on Secondary Outcomes". 
 
 ## Project Structure
 
