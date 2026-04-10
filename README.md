@@ -14,9 +14,9 @@ The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo
 
 The intended convention is to keep raw data and generated data separate.
 
-- Keep raw or externally downloaded inputs in `data/` at the project's root (this is gitignored).
-- Keep preprocessed outputs and other generated artifacts in `artifacts/` (this is not gitignored).
-- Treat `data/` as the source location for inputs and `artifacts/` as the destination for anything produced by the pipeline.
+- We keep raw or externally downloaded inputs in `data/` at the project's root (this is gitignored).
+- We keep preprocessed outputs and other generated artifacts in `artifacts/` (this is not gitignored).
+- We treat `data/` as the source location for inputs and `artifacts/` as the destination for anything produced by the pipeline.
 
 ## Python Environments
 
