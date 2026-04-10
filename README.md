@@ -7,8 +7,8 @@ The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo
 - `processor/`: the Python project. This contains the installable package for any reusable utilities for the pipeline.
 - `notebooks/`: exploratory Jupyter notebooks. These use the code from `processor/` instead of reimplementing pipeline logic inside the notebooks.
 - `R/`: the R part of the project. This contains standalone R scripts for steps that are easier or more appropriate to run in R.
-- `data/`: raw input data. Downloaded source files, raw archives, and any large local-only inputs should live here.
-- `artifacts/`: derived outputs. Preprocessed tables, metadata products, cached intermediate results, and other generated artifacts should live here.
+- `data/` (not committed to repo): raw input data. Downloaded source files, raw archives, and any large local-only inputs should be here.
+- `artifacts/`: derived outputs. Preprocessed tables, metadata products, cached intermediate results, and other generated artifacts should be here.
 
 ## Data Conventions
 
