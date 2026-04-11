@@ -2,7 +2,7 @@
 
 Preambling is mostly reading the series matrix and the raw CEL filenames, pulling out the sample metadata needed for the project, and writing a master sample sheet CSV for the downstream analysis steps.
 
-We use the public GEO release for GSE107015, so: 
+We use the public GEO release for GSE107015: 
 
 - `GSE107015_series_matrix.txt`: the GEO series matrix. Here we only use the `!Sample_*` metadata rows.
 - `GSE107015_RAW/*.CEL.gz`: the raw Affymetrix Human Genome U-133 Plus 2.0 files. Filenames such as `GSM2859594_EA05064_31476_H133_Plus_10265_3.CEL.gz` carry the GEO sample id, batch code, scan id, platform code, subject id, and a timepoint code.
