@@ -1,10 +1,8 @@
 import csv
 import gzip
-import urllib.request
 from pathlib import Path
 import re
 
-SERIES_MATRIX_URL = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107015/matrix/GSE107015_series_matrix.txt.gz"
 FILENAME_PATTERN = re.compile(
     r"^(?P<geo_sample_id>GSM\d+)_"
     r"(?P<batch_code>EA05064)_"
@@ -26,10 +24,8 @@ CHARACTERISTIC_COLUMNS = {
     "tissue": "tissue"
 }
 
-def _read_series_matrix():
-    request = urllib.request.Request(SERIES_MATRIX_URL, headers={"User-Agent": "python"})
-    payload = urllib.request.urlopen(request).read()
-    text = gzip.decompress(payload).decode("utf-8", errors="replace")
+def _read_series_matrix(series_matrix_path):
+    text = series_matrix_path.read_text(errors="replace")
     sample_rows = {}
     characteristic_rows = []
     for line in text.splitlines():
@@ -62,9 +58,11 @@ def _read_series_matrix():
 
 
 def build_master_sample_sheet(data_dir, output_path):
-    geo_metadata = _read_series_matrix()
+    raw_data_dir = data_dir / "GSE107015_RAW"
+    series_matrix_path = data_dir / "GSE107015_series_matrix.txt"
+    geo_metadata = _read_series_matrix(series_matrix_path)
     rows = []
-    for raw_file in sorted(data_dir.glob("*.CEL.gz")):
+    for raw_file in sorted(raw_data_dir.glob("*.CEL.gz")):
         match = FILENAME_PATTERN.match(raw_file.name)
         row = match.groupdict()
         geo_row = geo_metadata[row["geo_sample_id"]]
