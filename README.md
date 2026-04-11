@@ -4,8 +4,8 @@ The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo
 
 ## Project Structure
 
-- `processor/`: the Python project. This contains the installable package for any reusable utilities for the pipeline.
-- `pipeline/`: the Python files here use the logic defined in `processor/` to illustrate the workflow in a more condensed view. The files contained here do not implement the actual analysis logic and mainly define parameters and call pre-built functions.
+- `tools/`: the Python project. This contains the installable package for any reusable utilities for the pipeline.
+- `pipeline/`: the Python files here use the logic defined in `tools/` to illustrate the workflow in a more condensed view. The files contained here do not implement the actual analysis logic and mainly define parameters and call pre-built functions.
 - `R/`: the R part of the project. This contains standalone R scripts for steps that are easier or more appropriate to run in R.
 - `data/` (not committed to repo): raw input data. Downloaded source files, raw archives, and any large local-only inputs should be here.
 - `artifacts/`: derived outputs. Preprocessed tables, metadata products, cached intermediate results, and other generated artifacts should be here.
@@ -27,11 +27,11 @@ So, the intended workflow is:
 ```bash
 uv venv 
 source .venv/bin/activate
-cd processor
+cd tools
 uv pip install -e .
 ```
 
-Once `processor/` is installed, notebooks (or external scripts) can import from the package directly, assuming they use the same environment.
+Once `tools/` is installed, notebooks (or external scripts) can import from the package directly, assuming they use the same environment.
 
 Example:
 
