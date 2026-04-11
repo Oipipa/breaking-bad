@@ -43,7 +43,11 @@ def _read_series_matrix():
             sample_rows[key] = values
     geo_ids = sample_rows["!Sample_geo_accession"]
     metadata = {geo_id: {} for geo_id in geo_ids}
-    direct_columns = {"!Sample_title": "sample_title", "!Sample_source_name_ch1": "source_name", "!Sample_platform_id": "platform_id"}
+    direct_columns = {
+        "!Sample_title": "sample_title", 
+        "!Sample_source_name_ch1": "source_name", 
+        "!Sample_platform_id": "platform_id"
+    }
     for key, column in direct_columns.items():
         for geo_id, value in zip(geo_ids, sample_rows[key]):
             metadata[geo_id][column] = value
