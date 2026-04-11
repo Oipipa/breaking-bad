@@ -5,7 +5,7 @@ The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo
 ## Project Structure
 
 - `processor/`: the Python project. This contains the installable package for any reusable utilities for the pipeline.
-- `notebooks/`: exploratory Jupyter notebooks. These use the code from `processor/` instead of reimplementing pipeline logic inside the notebooks.
+- `pipeline/`: the Python files here use the logic defined in `processor/` to illustrate the workflow in a more condensed view. The files contained here do not implement the actual analysis logic and mainly define parameters and call pre-built functions.
 - `R/`: the R part of the project. This contains standalone R scripts for steps that are easier or more appropriate to run in R.
 - `data/` (not committed to repo): raw input data. Downloaded source files, raw archives, and any large local-only inputs should be here.
 - `artifacts/`: derived outputs. Preprocessed tables, metadata products, cached intermediate results, and other generated artifacts should be here.
@@ -14,7 +14,7 @@ The data source for this project is [GSE107015](https://www.ncbi.nlm.nih.gov/geo
 
 The intended convention is to keep raw data and generated data separate.
 
-- We keep raw or externally downloaded inputs in `data/` at the project's root (this is gitignored).
+- We keep raw or externally downloaded inputs in `data/` at the project's root (this is gitignored). **Run `pipeline/preamble.py` to download and extract the data automatically**
 - We keep preprocessed outputs and other generated artifacts in `artifacts/` (this is not gitignored).
 - We treat `data/` as the source location for inputs and `artifacts/` as the destination for anything produced by the pipeline.
 
