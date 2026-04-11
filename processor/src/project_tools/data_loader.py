@@ -52,5 +52,3 @@ def download_gse107015_data(data_dir, *, keep_archives: bool = False) -> dict[st
     if not keep_archives:
         matrix_gz.unlink(missing_ok=True)
         raw_tar.unlink(missing_ok=True)
-
-    return {"data_dir": data_dir, "series_matrix": matrix_txt, "raw_dir": raw_dir}
