@@ -25,6 +25,7 @@ CHARACTERISTIC_COLUMNS = {
 }
 
 def _read_series_matrix(series_matrix_path):
+    print(f"Reading series matrix: {series_matrix_path}")
     text = series_matrix_path.read_text(errors="replace")
     sample_rows = {}
     characteristic_rows = []
@@ -38,6 +39,7 @@ def _read_series_matrix(series_matrix_path):
         elif key not in sample_rows:
             sample_rows[key] = values
     geo_ids = sample_rows["!Sample_geo_accession"]
+    print(f"Loaded metadata for {len(geo_ids)} GEO samples")
     metadata = {geo_id: {} for geo_id in geo_ids}
     direct_columns = {
         "!Sample_title": "sample_title", 
@@ -62,7 +64,9 @@ def build_master_sample_sheet(data_dir, output_path):
     series_matrix_path = data_dir / "GSE107015_series_matrix.txt"
     geo_metadata = _read_series_matrix(series_matrix_path)
     rows = []
-    for raw_file in sorted(raw_data_dir.glob("*.CEL.gz")):
+    raw_files = sorted(raw_data_dir.glob("*.CEL.gz"))
+    print(f"Found {len(raw_files)} raw CEL files in {raw_data_dir}")
+    for raw_file in raw_files:
         match = FILENAME_PATTERN.match(raw_file.name)
         row = match.groupdict()
         geo_row = geo_metadata[row["geo_sample_id"]]
@@ -105,6 +109,7 @@ def build_master_sample_sheet(data_dir, output_path):
         "platform_code"
     ]
     output_path.parent.mkdir(parents=True, exist_ok=True)
+    print(f"Writing master sample sheet with {len(rows)} rows to {output_path}")
     with output_path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
