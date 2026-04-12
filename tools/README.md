@@ -32,7 +32,7 @@ Across the public GEO release, this gives us 209 arrays from 98 subjects over 54
 - `present_pct_*` summarizes the fraction of probe sets called present by MAS5 on each array. Lower values can flag weaker chips, but here most arrays sit in the same broad low-to-mid 40% range, so there is nothing alarming worth mentioning here. 
 - `rma_median_*` summarizes the center of each normalized array. After successful RMA normalization, these values should line up fairly tightly, which they do here.
 - `rma_iqr_*` summarizes the within-array spread of normalized expression. Similar IQRs across samples suggest that one group is not globally compressed or inflated relative to another.
-- `pc1_variance_pct` and `pc2_variance_pct` I men this is pretty self explanatory. 
+- `pc1_variance_pct` and `pc2_variance_pct` I mean this is pretty self explanatory. 
 
 ### PCA after RMA
 
