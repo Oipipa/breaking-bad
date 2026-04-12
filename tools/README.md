@@ -36,7 +36,7 @@ Across the public GEO release, this gives us 209 arrays from 98 subjects over 54
 
 ### PCA after RMA
 
-![PCA after RMA normalization](../artifacts/pca_rma.png)
+![PCA after RMA normalization](../figures/pca_rma.png)
 
 The PCA cloud is fairly mixed across treatment arms and timepoints. There is no clean split between topiramate and placebo, and there is no week-specific cluster that would suggest a dominant batch effect or a failed normalization step. A few samples sit on the edges of the cloud, especially `GSM2859594` and `GSM2859640`, so those are worth keeping in mind for sensitivity checks later, but they do not form a separate technical cluster.
 
