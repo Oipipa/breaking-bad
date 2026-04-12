@@ -29,10 +29,10 @@ Across the public GEO release, this gives us 209 arrays from 98 subjects over 54
 
 - `n_samples`, `n_subjects`, and `n_probe_sets` describe the size of the dataset that actually made it through preprocessing.
 - `n_topiramate`, `n_placebo`, `n_baseline`, `n_week8`, and `n_week12` describe the arm and timepoint balance that the next model will have to work with.
-- `present_pct_*` summarizes the fraction of probe sets called present by MAS5 on each array. Lower values can flag weaker chips, but here most arrays sit in the same broad low-to-mid 40% range, so there is no sign of a cohort-wide failure.
+- `present_pct_*` summarizes the fraction of probe sets called present by MAS5 on each array. Lower values can flag weaker chips, but here most arrays sit in the same broad low-to-mid 40% range, so there is nothing alarming worth mentioning here. 
 - `rma_median_*` summarizes the center of each normalized array. After successful RMA normalization, these values should line up fairly tightly, which they do here.
 - `rma_iqr_*` summarizes the within-array spread of normalized expression. Similar IQRs across samples suggest that one group is not globally compressed or inflated relative to another.
-- `pc1_variance_pct` and `pc2_variance_pct` say how much of the total variance is absorbed by the first two PCA axes. Here the leading components capture structure, but not a single overwhelming technical axis.
+- `pc1_variance_pct` and `pc2_variance_pct` I men this is pretty self explanatory. 
 
 ### PCA after RMA
 
