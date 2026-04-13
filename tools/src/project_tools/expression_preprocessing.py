@@ -22,7 +22,7 @@ def ensure_bioconductor_packages(r_dir, packages = REQUIRED_R_PACKAGES, *, insta
     )
 
 
-def run_rma_quality_control(raw_dir, artifacts_dir, r_dir):
+def run_rma_preprocess(raw_dir, artifacts_dir, r_dir):
     master_sheet_path = artifacts_dir / "master_sample_sheet.csv"
     quality_control_script_path = r_dir / "quality_control.R"
     expression_matrix_csv = artifacts_dir / "expression_matrix_rma.csv"

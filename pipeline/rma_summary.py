@@ -1,0 +1,4 @@
+from project_tools.preprocessing_results import quality_control_summary
+from __paths import PATHS
+
+quality_control_summary(PATHS.artifacts_dir)

@@ -78,7 +78,7 @@ def _build_qc_summary(master_rows, preprocessing_qc_rows, sample_ids, expression
 
 def _write_qc_summary(path, qc_summary):
     fieldnames = list(qc_summary[0].keys())
-    with Path(path).open("w", newline="") as handle:
+    with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(qc_summary)
@@ -233,7 +233,7 @@ def _save_density_plot(path, qc_summary, sample_ids, expression_matrix):
     plt.close(fig)
 
 
-def quality_control_results(artifacts_dir):
+def quality_control_summary(artifacts_dir):
     artifacts_dir = artifacts_dir
     master_sheet_path = artifacts_dir / "master_sample_sheet.csv"
     expression_matrix_csv = artifacts_dir / "expression_matrix_rma.csv"
@@ -257,11 +257,3 @@ def quality_control_results(artifacts_dir):
     _save_pca_plot(pca_plot_png, qc_summary)
     _save_boxplot(rma_boxplot_png, qc_summary, sample_ids, expression_matrix)
     _save_density_plot(rma_density_png, qc_summary, sample_ids, expression_matrix)
-
-    return {
-        "qc_summary_csv": qc_summary_csv,
-        "qc_metrics_csv": qc_metrics_csv,
-        "pca_plot_png": pca_plot_png,
-        "rma_boxplot_png": rma_boxplot_png,
-        "rma_density_png": rma_density_png
-    }

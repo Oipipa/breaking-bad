@@ -1,14 +1,13 @@
 import gzip
 import shutil
 import tarfile
-from pathlib import Path
 from urllib.request import urlretrieve
 
 SERIES_MATRIX_GZ_URL = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107015/matrix/GSE107015_series_matrix.txt.gz"
 RAW_TAR_URL = "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE107nnn/GSE107015/suppl/GSE107015_RAW.tar"
 
 
-def _download(url: str, path: Path) -> Path:
+def _download(url, path):
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         print(f"Downloading {path.name}")
@@ -16,7 +15,7 @@ def _download(url: str, path: Path) -> Path:
     return path
 
 
-def _gunzip(source: Path, target: Path) -> Path:
+def _gunzip(source, target):
     if not target.exists():
         print(f"Extracting {target.name}")
         with gzip.open(source, "rb") as src, target.open("wb") as dst:
@@ -24,7 +23,7 @@ def _gunzip(source: Path, target: Path) -> Path:
     return target
 
 
-def _untar(source: Path, target_dir: Path) -> Path:
+def _untar(source, target_dir):
     if not any(target_dir.glob("*.CEL.gz")):
         target_dir.mkdir(parents=True, exist_ok=True)
         print(f"Extracting {source.name}")
@@ -33,7 +32,7 @@ def _untar(source: Path, target_dir: Path) -> Path:
     return target_dir
 
 
-def download_gse107015_data(data_dir, *, keep_archives: bool = False) -> dict[str, Path]:
+def download_gse107015_data(data_dir, *, keep_archives: bool = False):
     matrix_txt = data_dir / "GSE107015_series_matrix.txt"
     raw_dir = data_dir / "GSE107015_RAW"
     matrix_gz = data_dir / "GSE107015_series_matrix.txt.gz"

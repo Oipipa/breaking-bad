@@ -1,6 +1,0 @@
-from project_tools.expression_preprocessing import run_rma_quality_control
-from project_tools.preprocessing_results import quality_control_results
-from __paths import PATHS
-
-run_rma_quality_control(PATHS.raw_dir, PATHS.artifacts_dir, PATHS.r_dir)
-quality_control_results(PATHS.artifacts_dir)
