@@ -10,6 +10,10 @@ class Paths:
     r_dir: Path
     raw_dir: Path
     r_library_dir: Path
+    series_matrix_path: Path
+    master_sample_sheet_path: Path
+    expression_matrix_csv: Path
+    preprocessing_qc_csv: Path
 
     @classmethod
     def from_pipeline_file(cls, path, level):
@@ -23,7 +27,11 @@ class Paths:
             artifacts_dir=artifacts_dir,
             r_dir=r_dir,
             raw_dir=data_dir / "GSE107015_RAW",
-            r_library_dir=root / ".r_library"
+            r_library_dir=root / ".r_library",
+            series_matrix_path=data_dir / "GSE107015_series_matrix.txt",
+            master_sample_sheet_path=artifacts_dir / "master_sample_sheet.csv",
+            expression_matrix_csv=artifacts_dir / "expression_matrix_rma.csv",
+            preprocessing_qc_csv=artifacts_dir / "preprocessing_qc.csv",
         )
 
 

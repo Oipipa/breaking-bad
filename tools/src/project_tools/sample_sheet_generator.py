@@ -25,7 +25,7 @@ CHARACTERISTIC_COLUMNS = {
 }
 
 def _read_series_matrix(path_configuration):
-    series_matrix_path = path_configuration.data_dir / "GSE107015_series_matrix.txt"
+    series_matrix_path = path_configuration.series_matrix_path
     print(f"Reading series matrix: {series_matrix_path}")
     text = series_matrix_path.read_text(errors="replace")
     sample_rows = {}
@@ -42,11 +42,7 @@ def _read_series_matrix(path_configuration):
     geo_ids = sample_rows["!Sample_geo_accession"]
     print(f"Loaded metadata for {len(geo_ids)} GEO samples")
     metadata = {geo_id: {} for geo_id in geo_ids}
-    direct_columns = {
-        "!Sample_title": "sample_title", 
-        "!Sample_source_name_ch1": "source_name", 
-        "!Sample_platform_id": "platform_id"
-    }
+    direct_columns = {"!Sample_title": "sample_title", "!Sample_source_name_ch1": "source_name", "!Sample_platform_id": "platform_id"}
     for key, column in direct_columns.items():
         for geo_id, value in zip(geo_ids, sample_rows[key]):
             metadata[geo_id][column] = value
@@ -62,7 +58,7 @@ def _read_series_matrix(path_configuration):
 
 def build_master_sample_sheet(path_configuration):
     raw_data_dir = path_configuration.raw_dir
-    output_path = path_configuration.artifacts_dir / "master_sample_sheet.csv"
+    output_path = path_configuration.master_sample_sheet_path
     geo_metadata = _read_series_matrix(path_configuration)
     rows = []
     raw_files = sorted(raw_data_dir.glob("*.CEL.gz"))
@@ -88,27 +84,7 @@ def build_master_sample_sheet(path_configuration):
         row.pop("filename_flag", None)
         rows.append(row)
     rows.sort(key=lambda row: (int(row["subject_id"]), int(row["timepoint_code"]), row["geo_sample_id"]))
-    fieldnames = [
-        "series_id",
-        "geo_sample_id",
-        "sample_title",
-        "source_name",
-        "subject_id",
-        "treatment_arm",
-        "timepoint",
-        "timepoint_code",
-        "raw_filename",
-        "cel_filename",
-        "gender",
-        "age",
-        "race",
-        "ethnicity",
-        "tissue",
-        "batch_code",
-        "array_scan_id",
-        "platform_id",
-        "platform_code"
-    ]
+    fieldnames = ["series_id", "geo_sample_id", "sample_title", "source_name", "subject_id", "treatment_arm", "timepoint", "timepoint_code", "raw_filename", "cel_filename", "gender", "age", "race", "ethnicity", "tissue", "batch_code", "array_scan_id", "platform_id", "platform_code"]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     print(f"Writing master sample sheet with {len(rows)} rows to {output_path}")
     with output_path.open("w", newline="") as handle:

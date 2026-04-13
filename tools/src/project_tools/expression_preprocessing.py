@@ -2,12 +2,7 @@ import subprocess
 import os
 from project_tools._paths import INTERNAL_CONFIGURATION
 
-REQUIRED_R_PACKAGES = (
-    "affy",
-    "AnnotationDbi",
-    "hgu133plus2.db",
-    "hgu133plus2cdf"
-)
+REQUIRED_R_PACKAGES = ("affy", "AnnotationDbi", "hgu133plus2.db", "hgu133plus2cdf")
 
 
 def _r_environment(path_configuration):
@@ -33,15 +28,9 @@ def ensure_bioconductor_packages(path_configuration):
 
 
 def run_rma_preprocessing(path_configuration):
-    raw_dir = path_configuration.raw_dir
     artifacts_dir = path_configuration.artifacts_dir
-    r_dir = path_configuration.r_dir
-    master_sheet_path = artifacts_dir / "master_sample_sheet.csv"
-    quality_control_script_path = r_dir / "quality_control.R"
-    expression_matrix_csv = artifacts_dir / "expression_matrix_rma.csv"
-    preprocessing_qc_csv = artifacts_dir / "preprocessing_qc.csv"
+    quality_control_script_path = path_configuration.r_dir / "quality_control.R"
     expression_bundle_rds = artifacts_dir / "expression_bundle_rma.rds"
-
     ensure_bioconductor_packages(path_configuration)
 
     artifacts_dir.mkdir(parents=True, exist_ok=True)
@@ -50,10 +39,10 @@ def run_rma_preprocessing(path_configuration):
         [
             "Rscript",
             str(quality_control_script_path),
-            str(master_sheet_path),
-            str(raw_dir),
-            str(expression_matrix_csv),
-            str(preprocessing_qc_csv),
+            str(path_configuration.master_sample_sheet_path),
+            str(path_configuration.raw_dir),
+            str(path_configuration.expression_matrix_csv),
+            str(path_configuration.preprocessing_qc_csv),
             str(expression_bundle_rds)
         ],
         env=_r_environment(path_configuration),
@@ -61,8 +50,8 @@ def run_rma_preprocessing(path_configuration):
     )
 
     return {
-        "expression_matrix_csv": expression_matrix_csv,
-        "preprocessing_qc_csv": preprocessing_qc_csv,
+        "expression_matrix_csv": path_configuration.expression_matrix_csv,
+        "preprocessing_qc_csv": path_configuration.preprocessing_qc_csv,
         "expression_bundle_rds": expression_bundle_rds
     }
 

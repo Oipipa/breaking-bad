@@ -19,7 +19,7 @@ def _download_series_matrix_archive(path_configuration):
 
 def _extract_series_matrix(path_configuration):
     series_matrix_archive = _download_series_matrix_archive(path_configuration)
-    series_matrix_path = path_configuration.data_dir / "GSE107015_series_matrix.txt"
+    series_matrix_path = path_configuration.series_matrix_path
     if not series_matrix_path.exists():
         print(f"Extracting {series_matrix_path.name}")
         with gzip.open(series_matrix_archive, "rb") as src, series_matrix_path.open("wb") as dst:
@@ -53,7 +53,7 @@ def _remove_archives(path_configuration):
 
 
 def download_gse107015_data(path_configuration):
-    matrix_txt = path_configuration.data_dir / "GSE107015_series_matrix.txt"
+    matrix_txt = path_configuration.series_matrix_path
     raw_dir = path_configuration.raw_dir
 
     if matrix_txt.exists():
