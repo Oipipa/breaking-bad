@@ -1,11 +1,11 @@
 import csv
 import random
-
 import matplotlib
 import numpy as np
+import matplotlib.pyplot as plt
+from project_tools._paths import INTERNAL_CONFIGURATION
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 MAX_PLOT_PROBES = 5000
 TIMEPOINT_MARKERS = {
@@ -19,14 +19,22 @@ TIMEPOINT_LABELS = {
     "week12": "Week 12"
 }
 
-def _read_csv_rows(path):
-    with path.open(newline="") as handle:
+def _read_master_rows(path_configuration):
+    master_sheet_path = path_configuration.artifacts_dir / "master_sample_sheet.csv"
+    with master_sheet_path.open(newline="") as handle:
         return list(csv.DictReader(handle))
 
 
-def _read_expression_matrix(path, max_probes=None, seed=0):
+def _read_preprocessing_qc_rows(path_configuration):
+    preprocessing_qc_csv = path_configuration.artifacts_dir / "preprocessing_qc.csv"
+    with preprocessing_qc_csv.open(newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def _read_expression_matrix(path_configuration, max_probes=None, seed=0):
+    expression_matrix_csv = path_configuration.artifacts_dir / "expression_matrix_rma.csv"
     rng = random.Random(seed)
-    with path.open(newline="") as handle:
+    with expression_matrix_csv.open(newline="") as handle:
         reader = csv.reader(handle)
         header = next(reader)
         sample_ids = header[4:]
@@ -76,15 +84,17 @@ def _build_qc_summary(master_rows, preprocessing_qc_rows, sample_ids, expression
     return qc_summary
 
 
-def _write_qc_summary(path, qc_summary):
+def _write_qc_summary(path_configuration, qc_summary):
+    qc_summary_csv = path_configuration.artifacts_dir / "qc_summary.csv"
     fieldnames = list(qc_summary[0].keys())
-    with path.open("w", newline="") as handle:
+    with qc_summary_csv.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(qc_summary)
 
 
-def _write_qc_metrics(path, qc_summary, expression_matrix, total_probes):
+def _write_qc_metrics(path_configuration, qc_summary, total_probes):
+    qc_metrics_csv = path_configuration.artifacts_dir / "qc_metrics.csv"
     present_pct = np.asarray([row["present_pct"] for row in qc_summary], dtype=float)
     rma_median = np.asarray([row["rma_median"] for row in qc_summary], dtype=float)
     rma_iqr = np.asarray([row["rma_iqr"] for row in qc_summary], dtype=float)
@@ -110,14 +120,15 @@ def _write_qc_metrics(path, qc_summary, expression_matrix, total_probes):
         ("pc2_variance_pct", float(qc_summary[0]["pc2_variance_pct"])),
     ]
 
-    with path.open("w", newline="") as handle:
+    with qc_metrics_csv.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["metric", "value"])
         writer.writeheader()
         for metric, value in metrics:
             writer.writerow({"metric": metric, "value": value})
 
 
-def _save_pca_plot(path, qc_summary):
+def _save_pca_plot(path_configuration, qc_summary):
+    pca_plot_png = path_configuration.artifacts_dir / "pca_rma.png"
     fig, ax = plt.subplots(figsize=(10, 8))
     for treatment_arm in ("Topiramate", "Placebo"):
         for timepoint in TIMEPOINT_MARKERS:
@@ -140,11 +151,12 @@ def _save_pca_plot(path, qc_summary):
     ax.legend(frameon=False, ncol=2)
 
     fig.tight_layout()
-    fig.savefig(path, dpi=150)
+    fig.savefig(pca_plot_png, dpi=150)
     plt.close(fig)
 
 
-def _save_boxplot(path, qc_summary, sample_ids, expression_matrix):
+def _save_boxplot(path_configuration, qc_summary, sample_ids, expression_matrix):
+    rma_boxplot_png = path_configuration.artifacts_dir / "rma_boxplot.png"
     sample_index = {sample_id: index for index, sample_id in enumerate(sample_ids)}
     panel_order = [
         ("Topiramate", "baseline"),
@@ -184,11 +196,12 @@ def _save_boxplot(path, qc_summary, sample_ids, expression_matrix):
 
     fig.suptitle("RMA Boxplots by Group", y=0.98)
     fig.tight_layout()
-    fig.savefig(path, dpi=150, bbox_inches="tight")
+    fig.savefig(rma_boxplot_png, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
-def _save_density_plot(path, qc_summary, sample_ids, expression_matrix):
+def _save_density_plot(path_configuration, qc_summary, sample_ids, expression_matrix):
+    rma_density_png = path_configuration.artifacts_dir / "rma_density.png"
     sample_index = {sample_id: index for index, sample_id in enumerate(sample_ids)}
     panel_order = [
         ("Topiramate", "baseline"),
@@ -229,31 +242,25 @@ def _save_density_plot(path, qc_summary, sample_ids, expression_matrix):
     fig.suptitle("RMA Density", y=0.98)
 
     fig.tight_layout()
-    fig.savefig(path, dpi=150, bbox_inches="tight")
+    fig.savefig(rma_density_png, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
-def quality_control_summary(artifacts_dir):
-    artifacts_dir = artifacts_dir
-    master_sheet_path = artifacts_dir / "master_sample_sheet.csv"
-    expression_matrix_csv = artifacts_dir / "expression_matrix_rma.csv"
-    preprocessing_qc_csv = artifacts_dir / "preprocessing_qc.csv"
-    qc_summary_csv = artifacts_dir / "qc_summary.csv"
-    qc_metrics_csv = artifacts_dir / "qc_metrics.csv"
-    pca_plot_png = artifacts_dir / "pca_rma.png"
-    rma_boxplot_png = artifacts_dir / "rma_boxplot.png"
-    rma_density_png = artifacts_dir / "rma_density.png"
-
-    master_rows = _read_csv_rows(master_sheet_path)
-    preprocessing_qc_rows = _read_csv_rows(preprocessing_qc_csv)
+def quality_control_summary(path_configuration):
+    master_rows = _read_master_rows(path_configuration)
+    preprocessing_qc_rows = _read_preprocessing_qc_rows(path_configuration)
     sample_ids, expression_matrix, total_probes = _read_expression_matrix(
-        expression_matrix_csv,
+        path_configuration,
         max_probes=MAX_PLOT_PROBES
     )
     qc_summary = _build_qc_summary(master_rows, preprocessing_qc_rows, sample_ids, expression_matrix)
 
-    _write_qc_summary(qc_summary_csv, qc_summary)
-    _write_qc_metrics(qc_metrics_csv, qc_summary, expression_matrix, total_probes)
-    _save_pca_plot(pca_plot_png, qc_summary)
-    _save_boxplot(rma_boxplot_png, qc_summary, sample_ids, expression_matrix)
-    _save_density_plot(rma_density_png, qc_summary, sample_ids, expression_matrix)
+    _write_qc_summary(path_configuration, qc_summary)
+    _write_qc_metrics(path_configuration, qc_summary, total_probes)
+    _save_pca_plot(path_configuration, qc_summary)
+    _save_boxplot(path_configuration, qc_summary, sample_ids, expression_matrix)
+    _save_density_plot(path_configuration, qc_summary, sample_ids, expression_matrix)
+
+
+if __name__ == "__main__":
+    quality_control_summary(INTERNAL_CONFIGURATION)

@@ -1,7 +1,7 @@
 import csv
 import gzip
-from pathlib import Path
 import re
+from project_tools._paths import INTERNAL_CONFIGURATION
 
 FILENAME_PATTERN = re.compile(
     r"^(?P<geo_sample_id>GSM\d+)_"
@@ -24,7 +24,8 @@ CHARACTERISTIC_COLUMNS = {
     "tissue": "tissue"
 }
 
-def _read_series_matrix(series_matrix_path):
+def _read_series_matrix(path_configuration):
+    series_matrix_path = path_configuration.data_dir / "GSE107015_series_matrix.txt"
     print(f"Reading series matrix: {series_matrix_path}")
     text = series_matrix_path.read_text(errors="replace")
     sample_rows = {}
@@ -59,10 +60,10 @@ def _read_series_matrix(series_matrix_path):
     return metadata
 
 
-def build_master_sample_sheet(data_dir, output_path):
-    raw_data_dir = data_dir / "GSE107015_RAW"
-    series_matrix_path = data_dir / "GSE107015_series_matrix.txt"
-    geo_metadata = _read_series_matrix(series_matrix_path)
+def build_master_sample_sheet(path_configuration):
+    raw_data_dir = path_configuration.raw_dir
+    output_path = path_configuration.artifacts_dir / "master_sample_sheet.csv"
+    geo_metadata = _read_series_matrix(path_configuration)
     rows = []
     raw_files = sorted(raw_data_dir.glob("*.CEL.gz"))
     print(f"Found {len(raw_files)} raw CEL files in {raw_data_dir}")
@@ -114,3 +115,7 @@ def build_master_sample_sheet(data_dir, output_path):
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+if __name__ == "__main__":
+    build_master_sample_sheet(INTERNAL_CONFIGURATION)

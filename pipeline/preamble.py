@@ -1,6 +1,0 @@
-from project_tools.data_loader import download_gse107015_data
-from project_tools.sample_sheet_generator import build_master_sample_sheet
-from __paths import PATHS
-
-download_gse107015_data(PATHS.data_dir)
-build_master_sample_sheet(PATHS.data_dir, PATHS.master_sheet_path)
