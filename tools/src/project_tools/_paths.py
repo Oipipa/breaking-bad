@@ -14,6 +14,9 @@ class Paths:
     master_sample_sheet_path: Path
     expression_matrix_csv: Path
     preprocessing_qc_csv: Path
+    expression_bundle_rds: Path
+    limma_results_dir: Path
+    limma_comparison_summary_csv: Path
 
     @classmethod
     def from_pipeline_file(cls, path, level):
@@ -32,6 +35,9 @@ class Paths:
             master_sample_sheet_path=artifacts_dir / "master_sample_sheet.csv",
             expression_matrix_csv=artifacts_dir / "expression_matrix_rma.csv",
             preprocessing_qc_csv=artifacts_dir / "preprocessing_qc.csv",
+            expression_bundle_rds=artifacts_dir / "expression_bundle_rma.rds",
+            limma_results_dir=artifacts_dir / "limma",
+            limma_comparison_summary_csv=artifacts_dir / "limma" / "limma_comparison_summary.csv",
         )
 
 

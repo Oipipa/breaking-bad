@@ -48,3 +48,45 @@ The pipeline itself is a python package at the root of the directory, so it can 
 ```bash
 python -m pipeline
 ```
+
+## limma Differential Expression (Per Week)
+
+The pipeline includes a per-week limma workflow on top of the RMA output.
+
+The DE model is run on baseline-normalized expression deltas:
+
+- week 8 delta = expression(week8) - expression(baseline)
+- week 12 delta = expression(week12) - expression(baseline)
+
+### Analysis mode
+
+The workflow runs in public no-label mode only.
+
+At each timepoint, it compares Topiramate vs Placebo on baseline-normalized deltas:
+
+- week 8: `Topiramate - Placebo` on `(week8 - baseline)`
+- week 12: `Topiramate - Placebo` on `(week12 - baseline)`
+
+### limma outputs
+
+Outputs are written to `artifacts/limma/`.
+
+Public no-label mode outputs:
+
+- `de_public_week8_topiramate_vs_placebo_limma.csv`
+- `de_public_week12_topiramate_vs_placebo_limma.csv`
+- `overlap_public_week8_week12.csv`
+- `overlap_public_week8_week12_pathway_input.csv`
+- `limma_comparison_summary.csv`
+- `limma_metadata_summary.csv`
+
+Pathway-ready files (generated per DE table):
+
+- `*_pathway_input_all.csv`
+- `*_pathway_input_p05.csv`
+- `*_pathway_input_fdr015.csv`
+- `*_ranked.rnk`
+
+## How to Read the Results
+
+- `limma_comparison_summary.csv` gives gene-level signal counts per contrast.

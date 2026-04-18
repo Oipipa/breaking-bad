@@ -2,7 +2,7 @@ import subprocess
 import os
 from project_tools._paths import INTERNAL_CONFIGURATION
 
-REQUIRED_R_PACKAGES = ("affy", "AnnotationDbi", "hgu133plus2.db", "hgu133plus2cdf")
+REQUIRED_R_PACKAGES = ("affy", "AnnotationDbi", "hgu133plus2.db", "hgu133plus2cdf", "limma", "fgsea", "msigdbr", "data.table")
 
 
 def _r_environment(path_configuration):
