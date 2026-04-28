@@ -51,3 +51,14 @@ These boxplots show the per-sample median and IQR after RMA, grouped by arm and 
 ![RMA density curves by treatment arm and timepoint](../figures/rma_density.png)
 
 The group-level density curves have almost the same overall shape. There is no obvious bimodality, truncation, or group-specific intensity profile after normalization. In practice, this says the arrays are living on a shared expression scale and that the normalization step did its job.
+## Pathway analysis
+
+The pathway-analysis step is a downstream add-on to the limma secondary-outcomes analysis. It reuses the ranked gene lists from `artifacts/limma/*_ranked.rnk` for preranked GSEA and the significant-gene exports from `artifacts/limma/*_pathway_input_p05.csv` and `artifacts/limma/*_pathway_input_fdr015.csv` for over-representation analysis.
+
+The script writes both per-contrast tables and combined tables into `artifacts/pathway/`. The combined files are usually the easiest starting point:
+
+- `gsea_all_results.csv`
+- `ora_all_results.csv`
+- `pathway_analysis_summary.csv`
+
+The wrapper is `project_tools.pathway_analysis.run_pathway_analysis`, and the full pipeline now calls it after `run_limma_differential_expression`.

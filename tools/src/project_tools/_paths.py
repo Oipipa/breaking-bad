@@ -17,6 +17,8 @@ class Paths:
     expression_bundle_rds: Path
     limma_results_dir: Path
     limma_comparison_summary_csv: Path
+    pathway_results_dir: Path
+    pathway_summary_csv: Path
 
     @classmethod
     def from_pipeline_file(cls, path, level):
@@ -38,6 +40,8 @@ class Paths:
             expression_bundle_rds=artifacts_dir / "expression_bundle_rma.rds",
             limma_results_dir=artifacts_dir / "limma",
             limma_comparison_summary_csv=artifacts_dir / "limma" / "limma_comparison_summary.csv",
+            pathway_results_dir=artifacts_dir / "pathway",
+            pathway_summary_csv=artifacts_dir / "pathway" / "pathway_analysis_summary.csv",
         )
 
 
